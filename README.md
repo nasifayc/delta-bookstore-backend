@@ -1,1 +1,1 @@
-# delta-ecommerce-backend
+# delta-bookstore-backend
