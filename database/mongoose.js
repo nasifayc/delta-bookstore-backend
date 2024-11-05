@@ -17,4 +17,4 @@ mongoose
     console.log("Error connecting to MongoDb: " + e.message);
   });
 
-export default mongoose.connection;
+export default mongoose;
