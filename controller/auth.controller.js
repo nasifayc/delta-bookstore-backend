@@ -60,3 +60,11 @@ export const login = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const protectedRoute = (req, res) => {
+  // At this point, `req.user` contains the decoded token data (thanks to `verifyToken` middleware)
+  res.status(200).json({
+    message: "Access granted to protected route",
+    user: req.user, // Include user information extracted from the token
+  });
+};
