@@ -27,6 +27,21 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+
+  // Array to store IDs of books in the wishlist
+  wishlistBooks: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Book", // Reference the Book model
+    },
+  ],
+  // Array to store IDs of purchased books
+  purchasedBooks: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Book", // Reference the Book model
+    },
+  ],
 });
 
 userSchema.methods.comparePassword = async function (candidatePassword) {
@@ -46,5 +61,5 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-const UserModel = db.model("user", userSchema);
+const UserModel = db.model("User", userSchema);
 export default UserModel;

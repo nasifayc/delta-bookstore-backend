@@ -13,17 +13,14 @@ export const register = async (req, res) => {
   }
 
   try {
-    const { username, password, email, phone, isAdmin } = req.body;
+    const { username, password, email, phone } = req.body;
     const newUser = new UserModel({
       username,
       password,
       email,
       phone,
-      isAdmin,
     });
     await newUser.save();
-
-    // const user = await UserModel.findOne({ username });
 
     const accessToken = generateAcessToken(newUser);
     const refreshToken = generateRefreshToken(newUser);
