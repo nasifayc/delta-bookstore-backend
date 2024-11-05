@@ -28,18 +28,17 @@ const userSchema = new Schema({
     default: false,
   },
 
-  // Array to store IDs of books in the wishlist
   wishlistBooks: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Book", // Reference the Book model
+      ref: "Book",
     },
   ],
-  // Array to store IDs of purchased books
+
   purchasedBooks: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Book", // Reference the Book model
+      ref: "Book",
     },
   ],
 });
