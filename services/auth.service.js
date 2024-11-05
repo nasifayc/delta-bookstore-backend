@@ -1,6 +1,12 @@
 import jwt from "jsonwebtoken";
 
-export const generateAcessToken = (tokenData) => {
+export const generateAcessToken = ({
+  _id,
+  username,
+  email,
+  phone,
+  isAdmin,
+}) => {
   return jwt.sign(
     { _id, username, email, phone, isAdmin },
     process.env.JWT_SECRET,
@@ -8,7 +14,13 @@ export const generateAcessToken = (tokenData) => {
   );
 };
 
-export const generateRefreshToken = (tokenData) => {
+export const generateRefreshToken = ({
+  _id,
+  username,
+  email,
+  phone,
+  isAdmin,
+}) => {
   return jwt.sign(
     { _id, username, email, phone, isAdmin },
     process.env.REFRESH_TOKEN_SECRET,

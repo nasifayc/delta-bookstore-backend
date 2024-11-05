@@ -22,6 +22,9 @@ export const register = async (req, res) => {
       isAdmin,
     });
     await newUser.save();
+
+    // const user = await UserModel.findOne({ username });
+
     const accessToken = generateAcessToken(newUser);
     const refreshToken = generateRefreshToken(newUser);
 
@@ -31,7 +34,7 @@ export const register = async (req, res) => {
       refreshToken,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
