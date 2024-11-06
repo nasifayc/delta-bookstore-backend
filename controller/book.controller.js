@@ -22,6 +22,7 @@ export const getBooks = async (req, res) => {
 };
 
 export const addBook = async (req, res) => {
+  console.log("------------------reached here ----------------");
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -29,8 +30,7 @@ export const addBook = async (req, res) => {
   }
 
   try {
-    const { title, description, author, genre, publicationYear, price } =
-      req.body;
+    const { title, author, genre, publicationYear, price } = req.body;
     // Check if both files are provided
     if (!req.files || !req.files["pdf"] || !req.files["coverImage"]) {
       return res.status(400).json({
@@ -50,7 +50,6 @@ export const addBook = async (req, res) => {
 
     const bookData = {
       title,
-      description,
       author,
       genre,
       publicationYear,

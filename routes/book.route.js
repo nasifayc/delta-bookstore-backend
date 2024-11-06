@@ -12,12 +12,11 @@ import {
 } from "../controller/book.controller.js";
 
 import { verifyToken } from "../middlewares/auth.middleware.js";
-import uploadBookCoverImage from "../middlewares/book-cover.middleware.js";
-import uploadBookPdf from "../middlewares/pdf.middleware.js";
+import bookUpload from "../middlewares/book.middleware.js";
 
 const router = express.Router();
 
-router.post("/books", uploadBookPdf, uploadBookCoverImage, addBook);
+router.post("/addbook", bookUpload, addBook);
 router.delete("/books/:bookId", removeBook);
 router.put("/books/:bookId", updateBook);
 router.get("/books/all", verifyToken, getBooks);

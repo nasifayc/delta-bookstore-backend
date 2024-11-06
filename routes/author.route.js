@@ -13,7 +13,7 @@ import uploadAuthorProfilePic from "../middlewares/author.middleware.js";
 
 const router = express.Router();
 
-router.post("/register/", uploadAuthorProfilePic, addAuthor);
+router.post("/register", uploadAuthorProfilePic, addAuthor);
 router.delete("/remove/:authorId", removeAuthor);
 router.get("/search", findAuthor);
 router.get("/all", allAuthors);
