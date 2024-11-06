@@ -1,6 +1,9 @@
 import UserModel from "../models/user.model.js";
 import BookModel from "../models/book.model.js";
 
+import fs from "fs";
+import path from "path";
+
 export const getAllBooks = async () => {
   return await BookModel.find();
 };
@@ -11,6 +14,17 @@ export const addNewBook = async (bookData) => {
 };
 
 export const deleteBook = async (bookId) => {
+  const book = BookModel.findById(bookId);
+  if (!book) {
+    throw new Error("Book not found");
+  }
+
+  if (book.fileUrl) {
+    fs.unlink(path.resolve(book.fileUrl), (err) => {
+      if (err)
+        throw new Error(`Failed to delete profile picture: ${err.message}`);
+    });
+  }
   return await BookModel.findByIdAndDelete(bookId);
 };
 
@@ -66,4 +80,21 @@ export const addBookToPurchased = async (userId, bookId) => {
     user.purchasedBooks.push(bookId);
   }
   return await user.save();
+};
+
+export const addReview = async (userId, bookId, rating, review) => {
+  const book = await BookModel.findById(bookId);
+  if (!book) {
+    throw new Error("Book not found");
+  }
+
+  book.reviews.push({ userId, comment, rating });
+
+  const totalRatings = book.reviews.reduce(
+    (sum, review) => sum + review.rating,
+    0
+  );
+  book.rating = totalRatings / book.reviews.length;
+
+  return await book.save();
 };

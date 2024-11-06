@@ -7,7 +7,9 @@ import {
   addBookToWishlist,
   removeBookFromWishlist,
   addBookToPurchased,
+  addReview,
 } from "../services/book.service.js";
+
 import { validationResult } from "express-validator";
 
 export const getBooks = async (req, res) => {
@@ -27,7 +29,21 @@ export const addBook = async (req, res) => {
   }
 
   try {
-    const bookData = req.body;
+    const { title, description, author, genre, publicationYear, price } =
+      req.body;
+    const fileUrl = req.files["pdf"][0].path;
+    const coverImage = req.files["coverImage"][0].path;
+
+    const bookData = {
+      title,
+      description,
+      author,
+      genre,
+      publicationYear,
+      price,
+      fileUrl,
+      coverImage,
+    };
     const book = await addNewBook(bookData);
     res.status(201).json({ message: "Book added successfully", book });
   } catch (error) {
@@ -128,5 +144,22 @@ export const purchaseBook = async (req, res) => {
       .json({ message: "Book purchased successfully", updatedUser });
   } catch (error) {
     res.status(500).json({ error: "Failed to complete purchase" });
+  }
+};
+
+export const addReview = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const bookId = req.params.bookId;
+    const { rating, review } = req.body;
+    const updatedUser = await addReview(userId, bookId, rating, review);
+
+    if (!updatedUser) {
+      res.status(500).json({ error: error.message });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Failed to add review", details: error.message });
   }
 };

@@ -2,15 +2,23 @@ import db from "../database/mongoose.js";
 
 const { Schema } = db;
 
+const reviewSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Reference to User model
+  comment: { type: String, required: true },
+  rating: { type: Number, required: true, min: 1, max: 5 }, // Rating between 1 and 5
+  date: { type: Date, default: Date.now },
+});
+
 const bookSchema = new Schema({
   title: { type: String, required: true, unique: true },
-  description: { type: String, required: true },
-  author: { type: String, required: true, default: "Unknown" },
-  genre: { type: String, default: "Not specified" },
+  author: { type: Schema.Types.ObjectId, ref: "Author", required: true },
+  genre: { type: String, required: true },
   publicationYear: { type: Number, required: true },
   price: { type: Number, required: true },
   fileUrl: { type: String, required: true },
   coverImage: { type: String, required: true },
+  rating: { type: Number, default: 0 },
+  reviews: [reviewSchema],
 });
 
 const BookModel = db.model("Book", bookSchema);
