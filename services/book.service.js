@@ -1,5 +1,6 @@
 import UserModel from "../models/user.model.js";
 import BookModel from "../models/book.model.js";
+import AuthorModel from "../models/author.model.js";
 
 import fs from "fs";
 import path from "path";
@@ -41,26 +42,30 @@ export const deleteBook = async (bookId) => {
   }
 };
 
-export const searchBooks = async ({ title, author, genre }) => {
-  const query = {};
+export const searchBooks = async (searchQuery) => {
+  // Create the base query to match the title and genre directly
+  const query = [
+    { title: { $regex: searchQuery, $options: "i" } },
+    { genre: { $regex: searchQuery, $options: "i" } },
+  ];
 
-  if (title) {
-    query.title = { $regex: title, $options: "i" };
+  // Search for authors whose name matches the query
+  const authors = await AuthorModel.find({
+    name: { $regex: searchQuery, $options: "i" },
+  }).select("_id");
+
+  if (authors.length > 0) {
+    const authorIds = authors.map((author) => author._id);
+    // Add an additional condition for matching authors in the $or array
+    query.push({ author: { $in: authorIds } });
   }
 
-  if (author) {
-    query.author = {
-      $regex: author,
-      $option: "i",
-    };
-  }
+  // Search the BookModel for any books that match title, genre, or author
+  const books = await BookModel.find({ $or: query });
 
-  if (genre) {
-    query.genre = { $regex: genre, $options: "i" };
-  }
-
-  return await BookModel.find(query);
+  return books;
 };
+
 export const updateExistingBook = async (bookId, updatedBookData) => {
   return await BookModel.findByIdAndUpdate(bookId, updatedBookData, {
     new: true,

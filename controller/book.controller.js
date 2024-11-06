@@ -115,8 +115,11 @@ export const findBooks = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { title, author, genre } = req.query;
-    const books = await searchBooks({ title, author, genre });
+    const { searchQuery } = req.query;
+    // const title = searchQuery;
+    // const author = searchQuery;
+    // const genre = searchQuery;
+    const books = await searchBooks(searchQuery);
 
     res.status(200).json({ books });
   } catch (error) {
