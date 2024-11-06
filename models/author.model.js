@@ -7,7 +7,7 @@ const authorSchema = new Schema({
     type: String,
     required: true,
   },
-  profileUrl: {
+  profilePic: {
     type: String,
     required: true,
   },

@@ -45,9 +45,11 @@ export const updateAuthorData = async (req, res) => {
 
 export const addAuthor = async (req, res) => {
   try {
+    const profilePicPath = req.file ? req.file.path : "";
+
     const authorData = {
       ...req.body,
-      profilePic: req.file?.profilePic?.[0]?.path || "",
+      profilePic: profilePicPath,
     };
 
     const author = await registerAuthor(authorData);
@@ -59,7 +61,8 @@ export const addAuthor = async (req, res) => {
 
 export const removeAuthor = async (req, res) => {
   try {
-    const authorId = req.params.id;
+    const authorId = req.params.authorId;
+    console.log(authorId);
     await deleteAuthor(authorId);
 
     res.status(200).json({ message: "Author deleted successfully" });

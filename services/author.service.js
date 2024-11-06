@@ -27,8 +27,9 @@ export const deleteAuthor = async (authorId) => {
     throw new Error("Author not found");
   }
 
-  if (author.profileUrl) {
-    fs.unlink(path.resolve(author.profileUrl), (err) => {
+  if (author.profilePic) {
+    console.log(author);
+    fs.unlink(path.resolve(author.profilePic), (err) => {
       if (err)
         throw new Error(`Failed to delete book cover image: ${err.message}`);
     });
@@ -36,6 +37,27 @@ export const deleteAuthor = async (authorId) => {
 
   await AuthorModel.findByIdAndDelete(authorId);
 };
+
+// export const deleteAuthor = async (authorId) => {
+//   const author = await AuthorModel.findById(authorId);  // Find the author by ID
+//   if (!author) {
+//     throw new Error("Author not found");  // If not found, throw an error
+//   }
+
+//   // Check if the author has a profile image and delete it
+//   if (author.profilePic) {  // Assuming the profile image is stored in profilePic
+//     const imagePath = path.resolve(author.profilePic);  // Get the path of the image
+//     try {
+//       // Delete the file and wait for it to complete before proceeding
+//       await fs.promises.unlink(imagePath);
+//     } catch (err) {
+//       throw new Error(`Failed to delete author profile image: ${err.message}`);
+//     }
+//   }
+
+//   // Delete the author from the database
+//   await AuthorModel.findByIdAndDelete(authorId);
+// };
 
 export const searchAuthors = async (searchTerm) => {
   const regex = new RegExp(searchTerm, "i"); // Case-insensitive search

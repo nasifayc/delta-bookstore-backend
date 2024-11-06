@@ -31,8 +31,22 @@ export const addBook = async (req, res) => {
   try {
     const { title, description, author, genre, publicationYear, price } =
       req.body;
-    const fileUrl = req.files["pdf"][0].path;
-    const coverImage = req.files["coverImage"][0].path;
+    // Check if both files are provided
+    if (!req.files || !req.files["pdf"] || !req.files["coverImage"]) {
+      return res.status(400).json({
+        error: "Both the book PDF and cover image are required.",
+      });
+    }
+
+    // Access files
+    const fileUrl = req.files["pdf"][0]?.path; // The file path for the PDF
+    const coverImage = req.files["coverImage"][0]?.path; // The file path for the cover image
+
+    if (!fileUrl || !coverImage) {
+      return res.status(400).json({
+        error: "Failed to upload PDF or cover image, please try again.",
+      });
+    }
 
     const bookData = {
       title,
@@ -147,7 +161,7 @@ export const purchaseBook = async (req, res) => {
   }
 };
 
-export const addReview = async (req, res) => {
+export const createReview = async (req, res) => {
   try {
     const userId = req.user.id;
     const bookId = req.params.bookId;

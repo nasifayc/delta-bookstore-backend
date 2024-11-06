@@ -9,12 +9,12 @@ import {
   findAuthor,
 } from "../controller/author.controller.js";
 
-import upload from "../middlewares/uploads.middleware.js";
+import uploadAuthorProfilePic from "../middlewares/author.middleware.js";
 
 const router = express.Router();
 
-router.post("/register", upload, addAuthor);
-router.delete("/remove", removeAuthor);
+router.post("/register/", uploadAuthorProfilePic, addAuthor);
+router.delete("/remove/:authorId", removeAuthor);
 router.get("/search", findAuthor);
 router.get("/all", allAuthors);
 router.get("/getAuthor/:authorId", getAuthor);
