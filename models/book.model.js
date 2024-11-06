@@ -17,6 +17,7 @@ const bookSchema = new Schema({
   price: { type: Number, required: true },
   fileUrl: { type: String, required: true },
   coverImage: { type: String, required: true },
+  audioFiles: [{ type: String }],
   rating: { type: Number, default: 0 },
   reviews: [reviewSchema],
 });
