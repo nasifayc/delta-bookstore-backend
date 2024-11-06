@@ -43,24 +43,20 @@ export const deleteBook = async (bookId) => {
 };
 
 export const searchBooks = async (searchQuery) => {
-  // Create the base query to match the title and genre directly
   const query = [
     { title: { $regex: searchQuery, $options: "i" } },
     { genre: { $regex: searchQuery, $options: "i" } },
   ];
 
-  // Search for authors whose name matches the query
   const authors = await AuthorModel.find({
     name: { $regex: searchQuery, $options: "i" },
   }).select("_id");
 
   if (authors.length > 0) {
     const authorIds = authors.map((author) => author._id);
-    // Add an additional condition for matching authors in the $or array
     query.push({ author: { $in: authorIds } });
   }
 
-  // Search the BookModel for any books that match title, genre, or author
   const books = await BookModel.find({ $or: query });
 
   return books;
