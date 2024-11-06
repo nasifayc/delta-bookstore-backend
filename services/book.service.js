@@ -14,35 +14,31 @@ export const addNewBook = async (bookData) => {
 };
 
 export const deleteBook = async (bookId) => {
-  const book = BookModel.findById(bookId);
+  const book = await BookModel.findById(bookId);
   if (!book) {
     throw new Error("Book not found");
   }
 
-  if (book.fileUrl) {
-    fs.unlink(path.resolve(book.fileUrl), (err) => {
-      if (err)
-        throw new Error(`Failed to delete book cover image: ${err.message}`);
-    });
-  }
-
-  if (book.coverImage) {
-    fs.unlink(path.resolve(book.coverImage), (err) => {
-      if (err) throw new Error(`Failed to delete book file: ${err.message}`);
-    });
-  }
-
-  if (book.audioFiles && book.audioFiles.length > 0) {
-    for (const audioPath of book.audioFiles) {
-      fs.unlink(path.resolve(audioPath), (err) => {
-        if (err) {
-          console.error(`Failed to delete audio file: ${err.message}`);
-          throw new Error(`Failed to delete audio file: ${err.message}`);
-        }
-      });
+  try {
+    if (book.fileUrl) {
+      await fs.promises.unlink(path.resolve(book.fileUrl));
     }
+
+    if (book.coverImage) {
+      await fs.promises.unlink(path.resolve(book.coverImage));
+    }
+
+    if (book.audioFiles && book.audioFiles.length > 0) {
+      for (const audioPath of book.audioFiles) {
+        await fs.promises.unlink(path.resolve(audioPath));
+      }
+    }
+
+    return await BookModel.findByIdAndDelete(bookId);
+  } catch (error) {
+    console.error(`Failed to delete files: ${error.message}`);
+    throw new Error(`Failed to delete files: ${error.message}`);
   }
-  return await BookModel.findByIdAndDelete(bookId);
 };
 
 export const searchBooks = async ({ title, author, genre }) => {
