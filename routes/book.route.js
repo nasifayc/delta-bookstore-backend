@@ -17,7 +17,7 @@ import bookUpload from "../middlewares/book.middleware.js";
 const router = express.Router();
 
 router.post("/addbook", bookUpload, addBook);
-router.delete("/books/:bookId", removeBook);
+router.delete("/removeBook/:bookId", removeBook);
 router.put("/books/:bookId", updateBook);
 router.get("/books/all", verifyToken, getBooks);
 router.get("/books/search", findBooks);

@@ -31,6 +31,17 @@ export const deleteBook = async (bookId) => {
       if (err) throw new Error(`Failed to delete book file: ${err.message}`);
     });
   }
+
+  if (book.audioFiles && book.audioFiles.length > 0) {
+    for (const audioPath of book.audioFiles) {
+      fs.unlink(path.resolve(audioPath), (err) => {
+        if (err) {
+          console.error(`Failed to delete audio file: ${err.message}`);
+          throw new Error(`Failed to delete audio file: ${err.message}`);
+        }
+      });
+    }
+  }
   return await BookModel.findByIdAndDelete(bookId);
 };
 
