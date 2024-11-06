@@ -22,7 +22,13 @@ export const deleteBook = async (bookId) => {
   if (book.fileUrl) {
     fs.unlink(path.resolve(book.fileUrl), (err) => {
       if (err)
-        throw new Error(`Failed to delete profile picture: ${err.message}`);
+        throw new Error(`Failed to delete book cover image: ${err.message}`);
+    });
+  }
+
+  if (book.coverImage) {
+    fs.unlink(path.resolve(book.coverImage), (err) => {
+      if (err) throw new Error(`Failed to delete book file: ${err.message}`);
     });
   }
   return await BookModel.findByIdAndDelete(bookId);
