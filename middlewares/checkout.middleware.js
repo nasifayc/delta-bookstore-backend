@@ -36,7 +36,7 @@ export const initializeChapaTransaction = async (req, res, next) => {
     };
 
     const response = await axios(options);
-    req.transactionData = response.data.data.checkout_url; // Pass the response data to the next middleware
+    req.transactionData = response.data.data.checkout_url;
     next();
   } catch (error) {
     console.error(
