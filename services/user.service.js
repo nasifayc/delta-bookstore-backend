@@ -1,4 +1,5 @@
 import UserModel from "../models/user.model.js";
+import BookModel from "../models/book.model.js";
 
 export const addBookToWishlist = async (userId, bookId) => {
   return await UserModel.findByIdAndUpdate(
@@ -31,11 +32,13 @@ export const addBookToPurchased = async (userId, bookId) => {
 
 export const addReview = async (userId, bookId, rating, review) => {
   const book = await BookModel.findById(bookId);
+  // console.log(bookId);
+  // console.log(book);
   if (!book) {
     throw new Error("Book not found");
   }
 
-  book.reviews.push({ userId, comment, rating });
+  book.reviews.push({ userId, review, rating });
 
   const totalRatings = book.reviews.reduce(
     (sum, review) => sum + review.rating,

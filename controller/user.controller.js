@@ -22,7 +22,7 @@ export const addToWishlist = async (req, res) => {
 
 export const removeFromWishlist = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const bookId = req.params.bookId;
     const updatedUser = await removeBookFromWishlist(userId, bookId);
 
@@ -36,7 +36,7 @@ export const removeFromWishlist = async (req, res) => {
 
 export const purchaseBook = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const bookId = req.params.bookId;
     const updatedUser = await addBookToPurchased(userId, bookId);
 
@@ -50,14 +50,17 @@ export const purchaseBook = async (req, res) => {
 
 export const createReview = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const bookId = req.params.bookId;
+    console.log(bookId);
     const { rating, review } = req.body;
     const updatedUser = await addReview(userId, bookId, rating, review);
 
     if (!updatedUser) {
       res.status(500).json({ error: error.message });
     }
+
+    res.status(200).json({ message: "Review added successfully", updatedUser });
   } catch (error) {
     res
       .status(500)

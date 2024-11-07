@@ -4,7 +4,7 @@ const { Schema } = db;
 
 const reviewSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  comment: { type: String, required: true },
+  review: { type: String, default: null },
   rating: { type: Number, required: true, min: 1, max: 5 },
   date: { type: Date, default: Date.now },
 });
