@@ -1,7 +1,12 @@
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+
+const generateTxRef = () => `chewatatest-${uuidv4()}`;
 
 export const initializeChapaTransaction = async (req, res, next) => {
   try {
+    const { amount } = req.body;
+    const { email, username, phone_number } = req.user;
     const options = {
       method: "POST",
       url: "https://api.chapa.co/v1/transaction/initialize",
@@ -10,18 +15,18 @@ export const initializeChapaTransaction = async (req, res, next) => {
         "Content-Type": "application/json",
       },
       data: {
-        amount: "10",
+        amount,
         currency: "ETB",
-        email: "nasifayc11@gmail.com",
-        first_name: "Nasifay",
-        last_name: "Chala",
-        phone_number: "0900624702",
-        tx_ref: "chewatatest-6669",
+        email,
+        username,
+        last_name: "",
+        phone_number,
+        tx_ref: generateTxRef(),
         callback_url:
-          "https://webhook.site/077164d6-29cb-40df-ba29-8a00e59a7e60",
+          "https://webhook.site/077164d6-29cb-40df-ba29-802a00e59a7e60",
         return_url: "https://www.google.com/",
         customization: {
-          title: "Emergency",
+          title: "Purchase Book",
           description: "I love online payments",
         },
         meta: {
@@ -31,7 +36,7 @@ export const initializeChapaTransaction = async (req, res, next) => {
     };
 
     const response = await axios(options);
-    req.transactionData = response.data; // Pass the response data to the next middleware
+    req.transactionData = response.data.data.checkout_url; // Pass the response data to the next middleware
     next();
   } catch (error) {
     console.error(

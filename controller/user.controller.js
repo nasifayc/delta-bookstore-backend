@@ -35,29 +35,27 @@ export const removeFromWishlist = async (req, res) => {
 };
 
 export const purchaseBook = async (req, res) => {
-  if (req.transactionData) {
-    res.status(200).json({
-      success: true,
-      message: "Transaction initialized successfully",
-      data: req.transactionData,
-    });
-  } else {
-    res.status(500).json({
-      success: false,
-      message: "Failed to initialize transaction",
-    });
-  }
-  // try {
-  //   const userId = req.user._id;
-  //   const bookId = req.params.bookId;
-  //   const updatedUser = await addBookToPurchased(userId, bookId);
+  try {
+    if (req.transactionData) {
+      const userId = req.user._id;
+      const bookId = req.params.bookId;
 
-  //   res
-  //     .status(200)
-  //     .json({ message: "Book purchased successfully", updatedUser });
-  // } catch (error) {
-  //   res.status(500).json({ error: "Failed to complete purchase" });
-  // }
+      const user = await addBookToPurchased(userId, bookId);
+      res.status(200).json({
+        success: true,
+        message: "Transaction completed successfully",
+        data: req.transactionData,
+        user,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "Failed to initialize transaction",
+      });
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const createReview = async (req, res) => {
