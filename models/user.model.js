@@ -23,9 +23,14 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
-  isAdmin: {
-    type: Boolean,
-    default: false,
+  profileImage: {
+    type: String,
+    default: null,
+  },
+  role: {
+    type: String,
+    enum: ["super_admin", "author", "user"],
+    default: "user",
   },
   isVerified: {
     type: Boolean,
@@ -51,12 +56,10 @@ const userSchema = new Schema({
   ],
 });
 
-// Method to compare the entered password with the stored hashed password
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Middleware to hash password before saving it
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
@@ -69,13 +72,11 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// Method to set OTP and expiration time
 userSchema.methods.setOtp = function (otp) {
   this.otp = otp;
   this.otpExpires = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
 };
 
-// Method to verify OTP
 userSchema.methods.verifyOtp = function (enteredOtp) {
   const isOtpValid = this.otp === enteredOtp && Date.now() < this.otpExpires;
   if (isOtpValid) {
@@ -84,6 +85,20 @@ userSchema.methods.verifyOtp = function (enteredOtp) {
     this.otpExpires = undefined;
   }
   return isOtpValid;
+};
+
+userSchema.methods.hasAdminAccess = function () {
+  return this.role === "super_admin" || this.role === "admin";
+};
+
+// Method to check if a user is an author
+userSchema.methods.isAuthor = function () {
+  return this.role === "author";
+};
+
+// Method to check if a user is a general user
+userSchema.methods.isGeneralUser = function () {
+  return this.role === "user";
 };
 
 const UserModel = db.model("User", userSchema);
