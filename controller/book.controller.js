@@ -42,9 +42,6 @@ export const addBook = async (req, res) => {
         error: "Failed to upload PDF or cover image, please try again.",
       });
     }
-    const audioFiles = req.files["audio"]
-      ? req.files["audio"].map((file) => file.path)
-      : [];
 
     const bookData = {
       title,
@@ -54,7 +51,6 @@ export const addBook = async (req, res) => {
       price,
       fileUrl,
       coverImage,
-      audioFiles,
     };
     const book = await addNewBook(bookData);
     res.status(201).json({ message: "Book added successfully", book });
