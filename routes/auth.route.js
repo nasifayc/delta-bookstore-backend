@@ -5,7 +5,7 @@ import {
   verifyOtp,
   protectedRoute,
 } from "../controller/auth.controller.js";
-import { verifyToken } from "../middlewares/auth.middleware.js";
+import { verifyToken, authorizeRoles } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 

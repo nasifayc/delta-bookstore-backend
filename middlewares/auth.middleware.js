@@ -17,3 +17,18 @@ export const verifyToken = (req, res, next) => {
       .json({ message: `Invalid or Expired token ${error.message}` });
   }
 };
+
+export const authorizeRoles =
+  (...allowedRoles) =>
+  (req, res, next) => {
+    if (!req.user) {
+      return res.status(403).json({ message: "User not authenticated" });
+    }
+
+    if (!allowedRoles.includes(req.user.role)) {
+      return res
+        .status(403)
+        .json({ message: "Access forbidden: insufficient privileges" });
+    }
+    next();
+  };

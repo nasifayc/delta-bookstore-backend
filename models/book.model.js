@@ -11,7 +11,7 @@ const reviewSchema = new Schema({
 
 const bookSchema = new Schema({
   title: { type: String, required: true, unique: true },
-  author: { type: Schema.Types.ObjectId, ref: "Author", required: true },
+  author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   genre: { type: String, required: true },
   publicationYear: { type: Number, required: true },
   price: { type: Number, required: true },
