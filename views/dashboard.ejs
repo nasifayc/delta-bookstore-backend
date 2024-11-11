@@ -3,25 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/styles/dashboard.css" />
   </head>
   <body>
-    <h1>Welcome to the Dashboard</h1>
-    <% if (user) { %>
-    <p>User: <%= user.username %></p>
-    <p>Email: <%= user.email %></p>
-    <% } else { %>
-    <p>Loading user data...</p>
-    <% } %>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <h1>Welcome to the Dashboard</h1>
+        <nav>
+          <a href="/dashboard/books">All Books</a>
+          <a href="/dashboard/books/add">Add Book</a>
+          <a href="/dashboard/settings">Settings</a>
+        </nav>
+      </header>
 
-    <a href="/logout">Logout</a>
-    <div class="sidebar">
-      <a href="/dashboard/books">All Books</a>
-      <a href="/dashboard/books/add">Add Book</a>
-      <a href="/dashboard/settings">Settings</a>
-    </div>
-    <div class="main-content">
-      <!-- Main dashboard content here -->
+      <div class="dashboard-content">
+        <aside class="sidebar">
+          <div class="user-info">
+            <% if (user) { %>
+            <p><strong>User:</strong> <%= user.username %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <% } else { %>
+            <p>Loading user data...</p>
+            <% } %>
+          </div>
+
+          <div class="menu-section">
+            <h3>Menu</h3>
+            <a href="/dashboard/overview">
+              <span class="icon">📊</span> Overview
+            </a>
+            <a href="/dashboard/customers">
+              <span class="icon">👥</span> Customers
+            </a>
+            <a href="/dashboard/products">
+              <span class="icon">📚</span> Products
+            </a>
+            <a href="/dashboard/transactions">
+              <span class="icon">💳</span> Transactions
+            </a>
+          </div>
+
+          <div class="general-section">
+            <h3>General</h3>
+            <a href="/dashboard/settings">
+              <span class="icon">⚙️</span> Settings
+            </a>
+            <a href="/dashboard/theme"> <span class="icon">🎨</span> Theme </a>
+          </div>
+
+          <a href="/logout" class="logout-btn">Logout</a>
+        </aside>
+
+        <div class="main-content">
+          <!-- Main dashboard content here -->
+        </div>
+      </div>
     </div>
   </body>
 </html>
