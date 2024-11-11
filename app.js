@@ -31,7 +31,6 @@ app.use("/api/user", userRoutes);
 
 app.get("/", (req, res) => {
   const token = req.cookies["accessToken"];
-  console.log("Token:", token);
   if (token) {
     res.redirect("/dashboard");
   } else {

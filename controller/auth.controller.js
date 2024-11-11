@@ -110,7 +110,6 @@ export const loginDashboard = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email });
-    console.log(user);
 
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ error: "Invalid credentials" });
