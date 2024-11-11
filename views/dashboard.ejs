@@ -23,6 +23,7 @@
             <% if (user) { %>
             <p><strong>User:</strong> <%= user.username %></p>
             <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Role:</strong> <%= user.role %></p>
             <% } else { %>
             <p>Loading user data...</p>
             <% } %>
@@ -57,6 +58,18 @@
 
         <div class="main-content">
           <!-- Main dashboard content here -->
+          <div class="books">
+            <h3>Total books</h3>
+            <p>150+</p>
+          </div>
+          <div class="users">
+            <h3>Total Users</h3>
+            <p>250+</p>
+          </div>
+          <div class="transaction">
+            <h3>Transactions</h3>
+            <p>ETB 150000</p>
+          </div>
         </div>
       </div>
     </div>
