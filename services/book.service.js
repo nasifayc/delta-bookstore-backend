@@ -1,5 +1,4 @@
 import BookModel from "../models/book.model.js";
-import AuthorModel from "../models/author.model.js";
 
 import fs from "fs";
 import path from "path";
@@ -7,7 +6,9 @@ import path from "path";
 export const getAllBooks = async () => {
   return await BookModel.find();
 };
-
+export const getBookById = async (bookId) => {
+  return await BookModel.findById(bookId);
+};
 export const addNewBook = async (bookData) => {
   const book = new BookModel(bookData);
   return await book.save();
@@ -46,15 +47,6 @@ export const searchBooks = async (searchQuery) => {
     { title: { $regex: searchQuery, $options: "i" } },
     { genre: { $regex: searchQuery, $options: "i" } },
   ];
-
-  const authors = await AuthorModel.find({
-    name: { $regex: searchQuery, $options: "i" },
-  }).select("_id");
-
-  if (authors.length > 0) {
-    const authorIds = authors.map((author) => author._id);
-    query.push({ author: { $in: authorIds } });
-  }
 
   const books = await BookModel.find({ $or: query });
 

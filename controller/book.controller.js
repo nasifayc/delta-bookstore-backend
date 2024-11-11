@@ -4,9 +4,19 @@ import {
   updateExistingBook,
   searchBooks,
   getAllBooks,
+  getBookById,
 } from "../services/book.service.js";
 
 import { validationResult } from "express-validator";
+
+export const getBooksDashboard = async (req, res) => {
+  try {
+    const books = await getAllBooks();
+    res.render("books", { books });
+  } catch (error) {
+    res.status(500).send("Error fetching books");
+  }
+};
 
 export const getBooks = async (req, res) => {
   try {
@@ -53,29 +63,33 @@ export const addBook = async (req, res) => {
       coverImage,
     };
     const book = await addNewBook(bookData);
-    res.status(201).json({ message: "Book added successfully", book });
+    res.redirect("/dashboard/books");
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send(error.message);
   }
 };
 
 export const removeBook = async (req, res) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   try {
     const bookId = req.params.bookId;
     const deletedBook = await deleteBook(bookId);
 
     if (!deletedBook) {
-      return res.status(404).json({ error: "Book not found" });
+      return res.status(500).send("Failed to delete book");
     }
-    res.status(200).json({ message: "Book deleted successfully" });
+    res.redirect("/dashboard/books");
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send(error.message);
+  }
+};
+
+export const editBook = async (req, res) => {
+  try {
+    const bookId = req.params.bookId;
+    const book = await getBookById(bookId);
+    res.render("editBook", { book });
+  } catch (e) {
+    res.status(500).send(e.message);
   }
 };
 
@@ -91,11 +105,19 @@ export const updateBook = async (req, res) => {
     const updatedBook = await updateExistingBook(bookId, updateData);
 
     if (!updatedBook) {
-      return res.status(404).json({ error: "Book not found" });
+      res.status(404).send("Book not found");
     }
-    res.status(200).json({ message: "Book updated successfully", updatedBook });
+    res.redirect("/dashboard/books");
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send("Failed to update book");
+  }
+};
+export const searchBooksDashboard = async (req, res) => {
+  try {
+    const books = await searchBooks(req.query.searchQuery);
+    res.render("books", { books });
+  } catch (error) {
+    res.status(500).send("Error searching books");
   }
 };
 
@@ -107,9 +129,7 @@ export const findBooks = async (req, res) => {
   }
   try {
     const { searchQuery } = req.query;
-    // const title = searchQuery;
-    // const author = searchQuery;
-    // const genre = searchQuery;
+
     const books = await searchBooks(searchQuery);
 
     res.status(200).json({ books });

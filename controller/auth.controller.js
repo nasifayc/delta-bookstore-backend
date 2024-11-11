@@ -100,6 +100,40 @@ export const verifyOtp = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+export const loginDashboard = async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email });
+    console.log(user);
+
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const accessToken = generateAcessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+    });
+
+    res.redirect("/dashboard");
+    // res.status(200).json({
+    //   message: "User logged in successfully",
+    //   refreshToken,
+    // });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
 
 export const login = async (req, res) => {
   const errors = validationResult(req);
@@ -109,8 +143,8 @@ export const login = async (req, res) => {
   }
 
   try {
-    const { username, password } = req.body;
-    const user = await UserModel.findOne({ username });
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email });
 
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ message: "Invalid credentials" });

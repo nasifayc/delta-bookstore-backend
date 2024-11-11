@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Welcome to the Dashboard</h1>
+    <% if (user) { %>
+    <p>User: <%= user.username %></p>
+    <p>Email: <%= user.email %></p>
+    <% } else { %>
+    <p>Loading user data...</p>
+    <% } %>
+
+    <a href="/logout">Logout</a>
+    <div class="sidebar">
+      <a href="/dashboard/books">All Books</a>
+      <a href="/dashboard/books/add">Add Book</a>
+      <a href="/dashboard/settings">Settings</a>
+    </div>
+    <div class="main-content">
+      <!-- Main dashboard content here -->
+    </div>
+  </body>
+</html>

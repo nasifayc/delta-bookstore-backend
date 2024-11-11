@@ -1,0 +1,16 @@
+<h1>Books</h1>
+<a href="/dashboard/books/add">Add New Book</a>
+<ul>
+  <% books.forEach(book => { %>
+  <li>
+    <%= book.title %> by <%= book.author %>
+    <a href="/dashboard/books/<%= book._id %>/edit">Edit</a>
+    <form
+      action="/dashboard/books/<%= book._id %>?_method=DELETE"
+      method="POST"
+    >
+      <button type="submit">Delete</button>
+    </form>
+  </li>
+  <% }) %>
+</ul>

@@ -13,7 +13,7 @@ import bookUpload from "../middlewares/book.middleware.js";
 const router = express.Router();
 
 router.post(
-  "/addbook",
+  "/dashboard/addbook",
   verifyToken,
   authorizeRoles("super_admin", "author"),
   bookUpload,
@@ -21,13 +21,18 @@ router.post(
 );
 
 router.delete(
-  "/removeBook/:bookId",
+  "/dashboard/removeBook/:bookId",
   verifyToken,
   authorizeRoles("super_admin"),
   removeBook
 );
-router.patch("/updatebook/:bookId", authorizeRoles("super_admin"), updateBook);
+router.patch(
+  "/dashboard/updatebook/:bookId",
+  authorizeRoles("super_admin"),
+  updateBook
+);
+router.get("/dashboard/all", getBooks);
 router.get("/all", getBooks);
-router.get("/search", findBooks);
+router.get("/dashboard/search", findBooks);
 
 export default router;

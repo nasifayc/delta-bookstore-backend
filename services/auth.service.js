@@ -5,10 +5,24 @@ export const generateAcessToken = ({
   username,
   email,
   phone,
-  isAdmin,
+  profileImage,
+  role,
+  isVerified,
+  wishlistBooks,
+  purchasedBooks,
 }) => {
   return jwt.sign(
-    { _id, username, email, phone, isAdmin },
+    {
+      _id,
+      username,
+      email,
+      phone,
+      profileImage,
+      role,
+      isVerified,
+      wishlistBooks,
+      purchasedBooks,
+    },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );
@@ -19,10 +33,24 @@ export const generateRefreshToken = ({
   username,
   email,
   phone,
-  isAdmin,
+  profileImage,
+  role,
+  isVerified,
+  wishlistBooks,
+  purchasedBooks,
 }) => {
   return jwt.sign(
-    { _id, username, email, phone, isAdmin },
+    {
+      _id,
+      username,
+      email,
+      phone,
+      profileImage,
+      role,
+      isVerified,
+      wishlistBooks,
+      purchasedBooks,
+    },
     process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: "7d",
