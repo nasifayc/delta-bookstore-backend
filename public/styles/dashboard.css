@@ -164,7 +164,6 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  margin-left: 250px; /* Adjust for sidebar */
   padding-top: 60px; /* Adjust for fixed header */
   width: calc(100% - 250px); /* Full width minus sidebar */
   box-sizing: border-box;
